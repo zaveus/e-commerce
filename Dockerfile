@@ -1,5 +1,13 @@
 FROM php:8.3-apache
 
+# Configure PHP error handling
+RUN printf '%s\n' \
+    'display_errors=Off' \
+    'display_startup_errors=Off' \
+    'log_errors=On' \
+    'error_reporting=E_ALL' \
+    > /usr/local/etc/php/conf.d/error-settings.ini
+
 # Install PostgreSQL support
 RUN apt-get update && \
     apt-get install -y libpq-dev && \
