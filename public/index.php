@@ -1,6 +1,9 @@
 <?php
     $baseDir = dirname(__DIR__);
     require_once "$baseDir/php/dbConnect.php";
+
+    $dbConnect->query("SELECT 1");
+    echo "Database connection successful!";
 ?>
 
 <!DOCTYPE html>
