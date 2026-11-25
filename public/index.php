@@ -1,6 +1,6 @@
 <?php
-    $baseDir = dirname(__DIR__);
-    require_once "$baseDir/php/dbConnect.php";
+    require_once __DIR__ . '/../php/dbConnect.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +24,7 @@
         <div><h1> All Items</h1></div>
         <div id="all-items">
              <?php 
-                //require_once 'allItems.php';
+                require_once 'allItems.php';
             ?>
         </div>
     </body>
