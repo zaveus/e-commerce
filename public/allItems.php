@@ -16,6 +16,7 @@
                 <p><?= htmlspecialchars($book['author']) ?></p>
                 <p><?= number_format($book['price'], 2) ?></p>
                 <p>Stock: <?= $book['stock'] ?></p>
+                <button type="button">Add To Cart</button>
             </div>
         <?php endforeach; ?>
     </div>
