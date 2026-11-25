@@ -4,7 +4,7 @@
 
     $query = "SELECT * FROM books ORDER BY id";
     $stmt = $dbConnect->query($query);
-    $ooks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
