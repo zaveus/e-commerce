@@ -8,7 +8,7 @@
 <html>
     <head>
         <title>Books On The Go! E-Commerce Platform</title>
-        <link rel="stylesheet" href="assets/css/style.css">
+        <link rel="stylesheet" href="style.css">
         
     </head>
     <script src="assets/js/script.js"></script>
