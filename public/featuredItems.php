@@ -3,7 +3,7 @@
 
     $query = "SELECT * FROM books WHERE is_featured = TRUE ORDER BY id";
     $stmt = $dbConnect->query($query);
-    $ooks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
