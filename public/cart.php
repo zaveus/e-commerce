@@ -44,15 +44,22 @@
 
 ?>
 
-<h1>Shopping Cart</h1>
+<!DOCTYPE html>
 
-<a href="index.php">Continue Shopping</a>
+<html>
+    <head></head>
+    <body>
+        <h1>Shopping Cart</h1>
 
-<?php if (isset($_SESSION['cart_error'])): ?>
-    <p><?= htmlspecialchars($_SESSION['cart_error']) ?></p>
-    <?php unset($_SESSION['cart_error']); ?>
-<?php endif; ?>
+        <a href="index.php">Continue Shopping</a>
 
-<pre>
-    <?php print_r($_SESSION['cart']); ?>
-</pre>
+        <?php if (isset($_SESSION['cart_error'])): ?>
+            <p><?= htmlspecialchars($_SESSION['cart_error']) ?></p>
+            <?php unset($_SESSION['cart_error']); ?>
+        <?php endif; ?>
+
+        <pre>
+            <?php print_r($_SESSION['cart']); ?>
+        </pre>
+    </body>
+</html>
