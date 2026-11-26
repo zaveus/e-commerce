@@ -19,7 +19,8 @@
             <h1>Books On The Go!</h1>
 
             <a href="cart.php">
-                Shopping Cart (<?= array_sum($_SESSION['cart']) ?>)
+                Shopping Cart
+                (<span id="cart-count"><?= array_sum($_SESSION['cart']) ?></span>)
             </a>
         </header>
 
@@ -32,5 +33,6 @@
         </div>
 
         <script src="assets/js/script.js"></script>
+        <script src="js/cart.js"></script>
     </body>
 </html>

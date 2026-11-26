@@ -17,16 +17,10 @@
                 <p><?= htmlspecialchars($book['author']) ?></p>
                 <p><?= number_format($book['price'], 2) ?></p>
                 <p>Stock: <?= $book['stock'] ?></p>
-                <form action="cart.php" method="POST">
-
-                    <input type="hidden" name="book_id"
-                        value="<?= $book['id'] ?>">
-
-                    <input type="hidden" name="action" value="add">
-
-                    <button type="submit">Add to Cart</button>
-
-                </form>
+                <button type="button"
+                        onclick="updateCart(<?= (int) $book['id'] ?>, 'add')">
+                    Add to Cart
+                </button>
             </div>
         <?php endforeach; ?>
     </div>
