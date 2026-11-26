@@ -1,5 +1,6 @@
 <?php
-    require_once __DIR__ . '/../php/dbConnect.php';
+    $baseDir = dirname(__DIR__);
+    require_once "$baseDir/php/dbConnect.php";
 
     $query = "SELECT * FROM books WHERE is_featured = TRUE ORDER BY id";
     $stmt = $dbConnect->query($query);
@@ -17,7 +18,17 @@
                 <p><?= htmlspecialchars($book['author']) ?></p>
                 <p><?= number_format($book['price'], 2) ?></p>
                 <p>Stock: <?= $book['stock'] ?></p>
-                <button type="button">Add To Cart</button>
+                <form action="cart.php" method="POST">
+                    <input type="hidden" name="book_id"
+                        value="<?= $book['id'] ?>">
+
+                    <input type="hidden" name="action" value="add">
+
+                    <input type="hidden" name="csrf_token"
+                        value="<?= $_SESSION['csrf_token'] ?>">
+
+                    <button type="submit">Add to Cart</button>
+                </form>
             </div>
         <?php endforeach; ?>
     </div>

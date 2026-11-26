@@ -1,6 +1,9 @@
 <?php
-    require_once __DIR__ . '/../php/dbConnect.php';
+    $baseDir = dirname(__DIR__);
+    require_once "$baseDir/php/dbConnect.php";
 
+    $_SESSION['cart'] ??= [];
+    $_SESSION['csrf_token'] ??= bin2hex(random_bytes(32));
 ?>
 
 <!DOCTYPE html>

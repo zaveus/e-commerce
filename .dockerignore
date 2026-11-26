@@ -1,0 +1,6 @@
+# Ignore only .env.local
+.env.local
+
+# Ignore all .env variants (recommended)
+.env*
+!.env.example
