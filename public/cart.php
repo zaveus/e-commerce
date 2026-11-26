@@ -33,7 +33,23 @@
                 $_SESSION['cart_error'] = "Book unavailable or stock limit reached.";
             }
         }
+        
+        if ($bookId > 0 && isset($_SESSION['cart'][$bookId])) {
 
+            if ($action === 'decrease') {
+
+                $_SESSION['cart'][$bookId]--;
+
+                if ($_SESSION['cart'][$bookId] <= 0) {
+                    unset($_SESSION['cart'][$bookId]);
+                }
+
+            } elseif ($action === 'remove') {
+
+                unset($_SESSION['cart'][$bookId]);
+
+            }
+        }
         header("Location: cart.php", true, 303);
         exit;
     }
@@ -94,7 +110,20 @@
 
                     <p>Price: $<?= number_format($book['price'], 2) ?></p>
 
-                    <p>Quantity: <?= $book['quantity'] ?></p>
+                    <form action="cart.php" method="POST">
+
+                    <input type="hidden" name="book_id" value="<?= $book['id'] ?>">
+
+                    <button type="submit" name="action" value="decrease">-</button>
+
+                    <span><?= $book['quantity'] ?></span>
+
+                    <button type="submit" name="action" value="add">+</button>
+                        
+
+                    <button type="submit" name="action" value="remove">Remove</button>
+
+                </form>
 
                     <p>Total: $<?= number_format($book['item_total'], 2) ?></p>
                 </div>
