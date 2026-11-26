@@ -37,6 +37,25 @@
         header("Location: cart.php", true, 303);
         exit;
     }
+    $cartItems = [];
+    $subtotal = 0;
+
+    $stmt = $dbConnect->prepare(
+        "SELECT * FROM books WHERE id = :id"
+    );
+
+    foreach ($_SESSION['cart'] as $bookId => $quantity) {
+        $stmt->execute(['id' => $bookId]);
+        $book = $stmt->fetch();
+
+        if ($book) {
+            $book['quantity'] = $quantity;
+            $book['item_total'] = $book['price'] * $quantity;
+
+            $subtotal += $book['item_total'];
+            $cartItems[] = $book;
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -56,8 +75,34 @@
             <?php unset($_SESSION['cart_error']); ?>
         <?php endif; ?>
 
-        <pre>
-            <?php print_r($_SESSION['cart']); ?>
-        </pre>
+        <?php if (empty($cartItems)): ?>
+
+            <p>Your cart is empty.</p>
+
+        <?php else: ?>
+
+            <?php foreach ($cartItems as $book): ?>
+
+                <div class="cart-item">
+                    <img
+                        src="<?= htmlspecialchars($book['image_url'] ?? '') ?>"
+                        alt="<?= htmlspecialchars($book['name']) ?>"
+                        width="100"
+                    >
+
+                    <h3><?= htmlspecialchars($book['name']) ?></h3>
+
+                    <p>Price: $<?= number_format($book['price'], 2) ?></p>
+
+                    <p>Quantity: <?= $book['quantity'] ?></p>
+
+                    <p>Total: $<?= number_format($book['item_total'], 2) ?></p>
+                </div>
+
+            <?php endforeach; ?>
+
+            <h2>Subtotal: $<?= number_format($subtotal, 2) ?></h2>
+
+        <?php endif; ?>
     </body>
 </html>
