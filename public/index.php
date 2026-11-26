@@ -1,4 +1,6 @@
 <?php
+    session_start();
+
     $baseDir = dirname(__DIR__);
     require_once "$baseDir/php/dbConnect.php";
 
