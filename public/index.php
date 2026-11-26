@@ -32,7 +32,6 @@
             <?php require_once 'allItems.php'; ?>
         </div>
 
-        <script src="assets/js/script.js"></script>
         <script src="js/cart.js"></script>
     </body>
 </html>
