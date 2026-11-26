@@ -18,15 +18,14 @@
                 <p><?= number_format($book['price'], 2) ?></p>
                 <p>Stock: <?= $book['stock'] ?></p>
                 <form action="cart.php" method="POST">
+
                     <input type="hidden" name="book_id"
                         value="<?= $book['id'] ?>">
 
                     <input type="hidden" name="action" value="add">
 
-                    <input type="hidden" name="csrf_token"
-                        value="<?= $_SESSION['csrf_token'] ?>">
-
                     <button type="submit">Add to Cart</button>
+
                 </form>
             </div>
         <?php endforeach; ?>

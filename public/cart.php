@@ -1,4 +1,3 @@
-
 <?php
     session_start();
 
@@ -6,17 +5,8 @@
     require_once "$baseDir/php/dbConnect.php";
 
     $_SESSION['cart'] ??= [];
-    $_SESSION['csrf_token'] ??= bin2hex(random_bytes(32));
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-        $token = $_POST['csrf_token'] ?? '';
-
-        if (!is_string($token) ||
-            !hash_equals($_SESSION['csrf_token'], $token)) {
-            http_response_code(403);
-            exit("Invalid request.");
-        }
 
         $bookId = filter_input(
             INPUT_POST,
@@ -51,24 +41,23 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <title>Shopping Cart</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
+    <head>
+        <title>Shopping Cart</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
 
-    <h1>Shopping Cart</h1>
+    <body>
+        <h1>Shopping Cart</h1>
 
-    <a href="index.php">Continue Shopping</a>
+        <a href="index.php">Continue Shopping</a>
 
-    <?php if (isset($_SESSION['cart_error'])): ?>
-        <p><?= htmlspecialchars($_SESSION['cart_error']) ?></p>
-        <?php unset($_SESSION['cart_error']); ?>
-    <?php endif; ?>
+        <?php if (isset($_SESSION['cart_error'])): ?>
+            <p><?= htmlspecialchars($_SESSION['cart_error']) ?></p>
+            <?php unset($_SESSION['cart_error']); ?>
+        <?php endif; ?>
 
-    <pre>
-        <?php print_r($_SESSION['cart']); ?>
-    </pre>
-
-</body>
+        <pre>
+            <?php print_r($_SESSION['cart']); ?>
+        </pre>
+    </body>
 </html>
