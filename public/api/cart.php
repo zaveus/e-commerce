@@ -1,3 +1,4 @@
+
 <?php
     session_start();
 
@@ -9,11 +10,19 @@
 
     $_SESSION['cart'] ??= [];
 
+    // Only accept POST requests
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         http_response_code(405);
+
+        echo json_encode([
+            "success" => false,
+            "message" => "Method not allowed."
+        ]);
+
         exit;
     }
 
+    // Retrieve and validate input
     $bookId = filter_input(
         INPUT_POST,
         'book_id',
@@ -26,12 +35,18 @@
         !in_array($action, ['add', 'decrease', 'remove'], true)) {
 
         http_response_code(400);
-        echo json_encode(["success" => false]);
+
+        echo json_encode([
+            "success" => false,
+            "message" => "Invalid request."
+        ]);
+
         exit;
     }
 
     $quantity = $_SESSION['cart'][$bookId] ?? 0;
 
+    // Add or increase quantity
     if ($action === 'add') {
 
         $stmt = $dbConnect->prepare(
@@ -54,6 +69,7 @@
 
         $_SESSION['cart'][$bookId] = $quantity + 1;
 
+    // Decrease quantity
     } elseif ($action === 'decrease') {
 
         if ($quantity > 1) {
@@ -62,11 +78,14 @@
             unset($_SESSION['cart'][$bookId]);
         }
 
+    // Remove the entire item
     } elseif ($action === 'remove') {
 
         unset($_SESSION['cart'][$bookId]);
+
     }
 
+    // Return updated cart to JavaScript
     echo json_encode([
         "success" => true,
         "cart" => (object) $_SESSION['cart'],

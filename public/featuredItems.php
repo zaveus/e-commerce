@@ -16,7 +16,7 @@
                 <img src="<?= htmlspecialchars($book['image_url'] ?? '') ?>" alt="<?= htmlspecialchars($book['name']) ?>" width="150"/>
                 <h3><?= htmlspecialchars($book['name']) ?></h3>
                 <p><?= htmlspecialchars($book['author']) ?></p>
-                <p><?= number_format($book['price'], 2) ?></p>
+                <p>$<?= number_format($book['price'], 2) ?></p>
                 <p>Stock: <?= $book['stock'] ?></p>
                 <button type="button"
                         onclick="updateCart(<?= (int) $book['id'] ?>, 'add')">

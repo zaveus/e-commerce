@@ -1,3 +1,4 @@
+
 <?php
     session_start();
 
@@ -6,53 +7,6 @@
 
     $_SESSION['cart'] ??= [];
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-        $bookId = filter_input(
-            INPUT_POST,
-            'book_id',
-            FILTER_VALIDATE_INT
-        );
-
-        $action = $_POST['action'] ?? '';
-
-        if ($bookId > 0 && $action === 'add') {
-
-            $stmt = $dbConnect->prepare(
-                "SELECT stock FROM books WHERE id = :id"
-            );
-
-            $stmt->execute(['id' => $bookId]);
-            $book = $stmt->fetch();
-
-            $quantity = $_SESSION['cart'][$bookId] ?? 0;
-
-            if ($book && $quantity < $book['stock']) {
-                $_SESSION['cart'][$bookId] = $quantity + 1;
-            } else {
-                $_SESSION['cart_error'] = "Book unavailable or stock limit reached.";
-            }
-        }
-        
-        if ($bookId > 0 && isset($_SESSION['cart'][$bookId])) {
-
-            if ($action === 'decrease') {
-
-                $_SESSION['cart'][$bookId]--;
-
-                if ($_SESSION['cart'][$bookId] <= 0) {
-                    unset($_SESSION['cart'][$bookId]);
-                }
-
-            } elseif ($action === 'remove') {
-
-                unset($_SESSION['cart'][$bookId]);
-
-            }
-        }
-        header("Location: cart.php", true, 303);
-        exit;
-    }
     $cartItems = [];
     $subtotal = 0;
 
@@ -86,20 +40,19 @@
 
         <a href="index.php">Continue Shopping</a>
 
-        <?php if (isset($_SESSION['cart_error'])): ?>
-            <p><?= htmlspecialchars($_SESSION['cart_error']) ?></p>
-            <?php unset($_SESSION['cart_error']); ?>
-        <?php endif; ?>
+        <p id="empty-cart-message"
+            <?= !empty($cartItems) ? 'hidden' : '' ?>>
+            Your cart is empty.
+        </p>
 
-        <?php if (empty($cartItems)): ?>
-
-            <p>Your cart is empty.</p>
-
-        <?php else: ?>
+        <div class="cart-container">
 
             <?php foreach ($cartItems as $book): ?>
 
-                <div class="cart-item">
+                <div class="cart-item"
+                    data-book-id="<?= (int) $book['id'] ?>"
+                    data-price-cents="<?= (int) round($book['price'] * 100) ?>">
+
                     <img
                         src="<?= htmlspecialchars($book['image_url'] ?? '') ?>"
                         alt="<?= htmlspecialchars($book['name']) ?>"
@@ -108,30 +61,47 @@
 
                     <h3><?= htmlspecialchars($book['name']) ?></h3>
 
-                    <p>Price: $<?= number_format($book['price'], 2) ?></p>
+                    <p>
+                        Price: $<?= number_format($book['price'], 2) ?>
+                    </p>
 
-                    <form action="cart.php" method="POST">
+                    <div class="quantity-controls">
 
-                    <input type="hidden" name="book_id" value="<?= $book['id'] ?>">
+                        <button type="button"
+                            onclick="updateCart(<?= (int) $book['id'] ?>, 'decrease')">
+                            -
+                        </button>
 
-                    <button type="submit" name="action" value="decrease">-</button>
+                        <span class="cart-quantity">
+                            <?= $book['quantity'] ?>
+                        </span>
 
-                    <span><?= $book['quantity'] ?></span>
+                        <button type="button"
+                            onclick="updateCart(<?= (int) $book['id'] ?>, 'add')">
+                            +
+                        </button>
 
-                    <button type="submit" name="action" value="add">+</button>
-                        
+                        <button type="button"
+                            onclick="updateCart(<?= (int) $book['id'] ?>, 'remove')">
+                            Remove
+                        </button>
 
-                    <button type="submit" name="action" value="remove">Remove</button>
+                    </div>
 
-                </form>
+                    <p>
+                        Total: $<span class="cart-item-total"><?= number_format($book['item_total'], 2) ?></span>
+                    </p>
 
-                    <p>Total: $<?= number_format($book['item_total'], 2) ?></p>
                 </div>
 
             <?php endforeach; ?>
 
-            <h2>Subtotal: $<?= number_format($subtotal, 2) ?></h2>
+        </div>
 
-        <?php endif; ?>
+        <h2>
+            Subtotal: $<span id="cart-subtotal"><?= number_format($subtotal, 2) ?></span>
+        </h2>
+
+        <script src="js/cart.js"></script>
     </body>
 </html>
