@@ -1,4 +1,3 @@
-
 <?php
     session_start();
 
@@ -26,6 +25,12 @@
             $cartItems[] = $book;
         }
     }
+    // ADding taxes
+
+    $taxRate = 0.06;
+    $tax = round($subtotal * $taxRate, 2);
+    $total = $subtotal + $tax;
+    
 ?>
 
 <!DOCTYPE html>
@@ -35,73 +40,85 @@
         <link rel="stylesheet" href="style.css">
     </head>
 
-    <body>
-        <h1>Shopping Cart</h1>
+    <body class="cart-page">
+        <main class="cart-wrapper">
+            <h1>Shopping Cart</h1>
 
-        <a href="index.php">Continue Shopping</a>
+            <a href="index.php" class="continue-shopping">< Continue Shopping</a>
 
-        <p id="empty-cart-message"
-            <?= !empty($cartItems) ? 'hidden' : '' ?>>
-            Your cart is empty.
-        </p>
+            <p id="empty-cart-message"
+                <?= !empty($cartItems) ? 'hidden' : '' ?>>
+                Your cart is empty.
+            </p>
+            <div class="cart-layout">
+                <div class="cart-container">
 
-        <div class="cart-container">
+                    <?php foreach ($cartItems as $book): ?>
 
-            <?php foreach ($cartItems as $book): ?>
+                        <div class="cart-item"
+                            data-book-id="<?= (int) $book['id'] ?>"
+                            data-price-cents="<?= (int) round($book['price'] * 100) ?>">
 
-                <div class="cart-item"
-                    data-book-id="<?= (int) $book['id'] ?>"
-                    data-price-cents="<?= (int) round($book['price'] * 100) ?>">
+                            <img
+                                src="<?= htmlspecialchars($book['image_url'] ?? '') ?>"
+                                alt="<?= htmlspecialchars($book['name']) ?>"
+                                width="100"
+                            >
 
-                    <img
-                        src="<?= htmlspecialchars($book['image_url'] ?? '') ?>"
-                        alt="<?= htmlspecialchars($book['name']) ?>"
-                        width="100"
-                    >
+                            <h3><?= htmlspecialchars($book['name']) ?></h3>
 
-                    <h3><?= htmlspecialchars($book['name']) ?></h3>
+                            <p>
+                                Price: $<?= number_format($book['price'], 2) ?>
+                            </p>
 
-                    <p>
-                        Price: $<?= number_format($book['price'], 2) ?>
-                    </p>
+                            <div class="quantity-controls">
 
-                    <div class="quantity-controls">
+                                <button type="button"
+                                    onclick="updateCart(<?= (int) $book['id'] ?>, 'decrease')">
+                                    -
+                                </button>
 
-                        <button type="button"
-                            onclick="updateCart(<?= (int) $book['id'] ?>, 'decrease')">
-                            -
-                        </button>
+                                <span class="cart-quantity">
+                                    <?= $book['quantity'] ?>
+                                </span>
 
-                        <span class="cart-quantity">
-                            <?= $book['quantity'] ?>
-                        </span>
+                                <button type="button"
+                                    onclick="updateCart(<?= (int) $book['id'] ?>, 'add')">
+                                    +
+                                </button>
 
-                        <button type="button"
-                            onclick="updateCart(<?= (int) $book['id'] ?>, 'add')">
-                            +
-                        </button>
+                                <button type="button"
+                                    onclick="updateCart(<?= (int) $book['id'] ?>, 'remove')">
+                                    Remove
+                                </button>
 
-                        <button type="button"
-                            onclick="updateCart(<?= (int) $book['id'] ?>, 'remove')">
-                            Remove
-                        </button>
+                            </div>
 
-                    </div>
+                            <p>
+                                Total: $<span class="cart-item-total"><?= number_format($book['item_total'], 2) ?></span>
+                            </p>
 
-                    <p>
-                        Total: $<span class="cart-item-total"><?= number_format($book['item_total'], 2) ?></span>
-                    </p>
+                        </div>
+
+                    <?php endforeach; ?>
 
                 </div>
 
-            <?php endforeach; ?>
+                <div class="cart-summary">
+                    <p>
+                        Subtotal: $<span id="cart-subtotal"><?= number_format($subtotal, 2) ?></span>
+                    </p>
 
-        </div>
+                    <p>
+                        Tax (6%): $<span id="cart-tax"><?= number_format($tax, 2) ?></span>
+                    </p>
 
-        <h2>
-            Subtotal: $<span id="cart-subtotal"><?= number_format($subtotal, 2) ?></span>
-        </h2>
-
+                    <h2>
+                        Total: $<span id="cart-total"><?= number_format($total, 2) ?></span>
+                    </h2>
+                </div>
+            </div>
+        </main>
         <script src="js/cart.js"></script>
     </body>
 </html>

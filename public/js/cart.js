@@ -88,6 +88,22 @@ function updateCartDisplay(cart) {
             (subtotal / 100).toFixed(2);
     }
 
+    // Update tax and total
+    const taxRate = 0.06;
+    const tax = Math.round(subtotal * taxRate);
+    const total = subtotal + tax;
+
+    const taxElement = document.getElementById("cart-tax");
+    const totalElement = document.getElementById("cart-total");
+
+    if (taxElement) {
+        taxElement.textContent = (tax / 100).toFixed(2);
+    }
+
+    if (totalElement) {
+        totalElement.textContent = (total / 100).toFixed(2);
+    }
+
     // Display empty cart message
     const emptyMessage =
         document.getElementById("empty-cart-message");
