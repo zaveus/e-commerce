@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="style.css">
     </head>
 
-    <body>
+    <body class="store-page">
         <header>
             <h1>Books On The Go!</h1>
 

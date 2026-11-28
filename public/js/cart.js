@@ -89,7 +89,7 @@ function updateCartDisplay(cart) {
     }
 
     // Update tax and total
-    const taxRate = 0.06;
+    const taxRate = 0.06625;
     const tax = Math.round(subtotal * taxRate);
     const total = subtotal + tax;
 

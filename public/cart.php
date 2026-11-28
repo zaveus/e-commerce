@@ -27,7 +27,7 @@
     }
     // ADding taxes
 
-    $taxRate = 0.06;
+    $taxRate = 0.06625;
     $tax = round($subtotal * $taxRate, 2);
     $total = $subtotal + $tax;
     
@@ -41,6 +41,10 @@
     </head>
 
     <body class="cart-page">
+        <header class="cart-header">
+            <h1>Books On The Go!</h1>
+            <a href="index.php">Continue Shopping</a>
+        </header>
         <main class="cart-wrapper">
             <h1>Shopping Cart</h1>
 
@@ -106,16 +110,19 @@
 
                 <div class="cart-summary">
                     <p>
-                        Subtotal: $<span id="cart-subtotal"><?= number_format($subtotal, 2) ?></span>
+                        Subtotal: <span id="cart-subtotal">$<?= number_format($subtotal, 2) ?></span>
                     </p>
 
                     <p>
-                        Tax (6%): $<span id="cart-tax"><?= number_format($tax, 2) ?></span>
+                        Tax (6.625%): <span id="cart-tax">$<?= number_format($tax, 2) ?></span>
                     </p>
 
                     <h2>
-                        Total: $<span id="cart-total"><?= number_format($total, 2) ?></span>
+                        Total: <span id="cart-total">$<?= number_format($total, 2) ?></span>
                     </h2>
+                    <a href="checkout.php" class="checkout-button">
+                        Proceed to Checkout
+                    </a>
                 </div>
             </div>
         </main>
